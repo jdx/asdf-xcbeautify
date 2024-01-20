@@ -37,12 +37,13 @@ list_all_versions() {
 }
 
 download_release() {
-	local version filename url
+	local version filename arch_and_platform file_ext url
 	version="$1"
 	filename="$2"
+	arch_and_platform="$(get_arch_and_platform)"
+	file_ext="$(get_download_file_extension)"
 
-	# TODO: Adapt the release URL convention for xcbeautify
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$GH_REPO/releases/download/${version}/xcbeautify-${version}-${arch_and_platform}.${file_ext}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -71,4 +72,39 @@ install_version() {
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
 	)
+}
+
+get_arch_and_platform() {
+	local -r os="$(get_os)"
+
+	if [[ $os == "macosx" ]]; then
+		local -r machine="$(uname -m)"
+		case $machine in
+			arm64) echo "arm64-apple-macosx" ;;
+			x86_64) echo "x86_64-apple-macosx" ;;
+			*) echo "universal-apple-macosx" ;;
+		esac
+	else
+		echo "x86_64-unknown-linux-gnu"
+	fi
+}
+
+get_os() {
+	local -r platform="$(uname -s)"
+
+	if [[ $platform == "Darwin" ]]; then
+		echo "macosx"
+	else
+		echo "linux"
+	fi
+}
+
+get_download_file_extension() {
+	local -r os="$(get_os)"
+
+	if [[ $os == "macosx" ]]; then
+		echo "zip"
+	else
+		echo "tar.xz"
+	fi
 }
