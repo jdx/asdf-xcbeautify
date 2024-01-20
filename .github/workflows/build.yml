@@ -8,13 +8,21 @@ on:
 
 jobs:
   plugin_test:
-    name: asdf plugin test
-    strategy:
-      matrix:
-        os:
-          - macos-13
-    runs-on: ${{ matrix.os }}
+    name: asdf plugin test macos
+    runs-on: macos-13
     steps:
+      - name: asdf_plugin_test
+        uses: asdf-vm/actions/plugin-test@v3
+        with:
+          command: xcbeautify --version
+  plugin_test_linux:
+    name: asdf plugin test linux
+    runs-on: ubuntu-latest
+    container:
+      image: swift:latest
+    steps:
+      - name: Install curl
+        run: apt-get update && apt-get install -y curl
       - name: asdf_plugin_test
         uses: asdf-vm/actions/plugin-test@v3
         with:
