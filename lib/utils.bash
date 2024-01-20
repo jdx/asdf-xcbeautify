@@ -80,9 +80,9 @@ get_arch_and_platform() {
 	if [[ $os == "macosx" ]]; then
 		local -r machine="$(uname -m)"
 		case $machine in
-			arm64) echo "arm64-apple-macosx" ;;
-			x86_64) echo "x86_64-apple-macosx" ;;
-			*) echo "universal-apple-macosx" ;;
+		arm64) echo "arm64-apple-macosx" ;;
+		x86_64) echo "x86_64-apple-macosx" ;;
+		*) echo "universal-apple-macosx" ;;
 		esac
 	else
 		echo "x86_64-unknown-linux-gnu"

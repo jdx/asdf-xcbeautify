@@ -20,9 +20,9 @@ download_release "$ASDF_INSTALL_VERSION" "$release_file"
 #  Extract contents of zip file into the download directory
 os=$(get_os)
 if [[ $os == "macosx" ]]; then
-    unzip -o "$release_file" -d "$ASDF_DOWNLOAD_PATH" >/dev/null || fail "Could not extract $release_file"
+	unzip -o "$release_file" -d "$ASDF_DOWNLOAD_PATH" >/dev/null || fail "Could not extract $release_file"
 else
-    tar -xJf "$release_file" -C "$ASDF_DOWNLOAD_PATH" >/dev/null || fail "Could not extract $release_file"
+	tar -xJf "$release_file" -C "$ASDF_DOWNLOAD_PATH" >/dev/null || fail "Could not extract $release_file"
 fi
 
 # Remove the zip file since we don't need to keep it
